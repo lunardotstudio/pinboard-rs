@@ -5,3 +5,8 @@
 // except according to those terms.
 
 //! Builders to interact with the set of user endpoints.
+mod secret;
+mod api_token;
+
+pub use self::secret::Secret;
+pub use self::api_token::ApiToken;
