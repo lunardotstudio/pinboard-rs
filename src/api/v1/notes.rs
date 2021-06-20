@@ -5,3 +5,8 @@
 // except according to those terms.
 
 //! Builders to interact with the set of note endpoints.
+mod list;
+mod note;
+
+pub use self::list::List;
+pub use self::note::Note;
