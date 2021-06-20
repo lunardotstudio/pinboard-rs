@@ -5,9 +5,8 @@
 // except according to those terms.
 #![allow(clippy::module_inception)]
 
-//! Builders to interact with the set of user endpoints.
+//! Builders to interact with the set of post endpoints.
 //!
-//! These endpoints are used for general site interactions
 mod update;
 mod add;
 mod delete;

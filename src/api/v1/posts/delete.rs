@@ -8,7 +8,7 @@ use derive_builder::Builder;
 
 use crate::api::endpoint_prelude::*;
 
-/// Query the `update` endpoint.
+/// Query the `v1/posts/delete` endpoint.
 #[derive(Debug, Clone, Builder)]
 pub struct Delete {
     /// The bookmark to delete
