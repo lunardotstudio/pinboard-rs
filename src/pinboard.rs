@@ -74,7 +74,7 @@ impl Pinboard {
         host: &str,
         auth: Auth
     ) -> PinboardResult<Self> {
-        let url = Url::parse(&format!("https://{}/v2", host))?;
+        let url = Url::parse(&format!("https://{}/", host))?;
         let client = Client::new();
         let api = Pinboard {
             client,
@@ -213,7 +213,7 @@ impl AsyncPinboard {
         host: &str,
         auth: Auth
     ) -> PinboardResult<Self> {
-        let url = Url::parse(&format!("https://{}/v2", host))?;
+        let url = Url::parse(&format!("https://{}/", host))?;
         let client = AsyncClient::new();
         let api = AsyncPinboard {
             client,
