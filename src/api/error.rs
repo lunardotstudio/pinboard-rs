@@ -47,6 +47,16 @@ where
         source: serde_json::Error,
     },
 
+    /// Pinboard returned an error without JSON information.
+    #[error("pinboard internal server error {}", status)]
+    PinboardService {
+        /// The status code for the return.
+        status: http::StatusCode,
+        /// The error data from Pinboard.
+        data: Vec<u8>,
+    },
+
+    
     /// Failed to parse and expected data type from JSON.
     #[error("could not parse {} data from JSON: {}", typename, source)]
     DataType {
@@ -104,6 +114,13 @@ where
         }
     }
 
+    pub(crate) fn server_error(status: http::StatusCode, body: &bytes::Bytes) -> Self {
+        Self::PinboardService {
+            status,
+            data: body.into_iter().copied().collect(),
+        }
+    }
+    
     pub(crate) fn from_pinboard(value: serde_json::Value) -> Self {
         // TODO: This is now how pinboard returns errors
         let error_message = value
