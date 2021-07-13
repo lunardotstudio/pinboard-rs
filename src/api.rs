@@ -18,6 +18,7 @@ mod error;
 mod params;
 pub(crate) mod query;
 mod ignore;
+mod raw;
 
 pub mod v1;
 pub mod v2;
@@ -41,3 +42,6 @@ pub use self::error::BodyError;
 
 pub use self::ignore::ignore;
 pub use self::ignore::Ignore;
+
+pub use self::raw::raw;
+pub use self::raw::Raw;
