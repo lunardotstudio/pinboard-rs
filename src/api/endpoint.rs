@@ -50,12 +50,9 @@ where
         } else {
             (req, Vec::new())
         };
-        println!("REQUEST: {:?}", req);
         let rsp = client.rest(req, data)?;
         let status = rsp.status();
-        println!("BODY: {:?}", rsp.body());
         let v = serde_json::from_slice(rsp.body())?;
-        println!("V: {:?}", v);
         if !status.is_success() {
             return Err(ApiError::from_pinboard(v));
         }
