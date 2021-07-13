@@ -12,6 +12,8 @@
 //! problems when the types and names change inside of those. If found, issues should be filed
 //! upstream.
 
+pub mod v1;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
