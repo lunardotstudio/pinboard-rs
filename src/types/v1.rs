@@ -10,6 +10,7 @@ use std::collections::HashMap;
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Default {
+    pub result: String
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -79,6 +80,8 @@ pub type PostsSubbest = Vec<std::collections::HashMap<String,Vec<String>>>;
 pub struct PostsUpdate {
     pub update_time: DateTime<Utc>
 }
+
+pub type Tags = HashMap<String, i64>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct UserApiToken {

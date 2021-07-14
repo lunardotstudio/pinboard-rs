@@ -11,7 +11,7 @@ use crate::api::endpoint_prelude::*;
 /// Query the `v1/tags/delete` endpoint.
 #[derive(Debug, Clone, Builder)]
 pub struct Delete<'a> {
-    /// The bookmark to delete
+    /// The tag to delete
     #[builder(setter(into))]
     tag: Cow<'a, str>
 }
