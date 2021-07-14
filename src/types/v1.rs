@@ -4,7 +4,54 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct PostsDefault {
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct Post {
+    pub href: String,
+    pub description: String,
+    pub extended: String,
+    pub meta: String,
+    pub hash: String,
+    pub time: DateTime<Utc>,
+    pub shared: String,
+    pub toread: String,
+    pub tags: String,
+}
+
+pub type Posts = Vec<Post>;
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct PostsAdd {
+    pub result_code: String
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct PostsDates {
+    pub user: String,
+    pub tag: String,
+    dates: HashMap<String, i32>
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct PostsList {
+    pub date: DateTime<Utc>,
+    pub user: String,
+    pub posts: Vec<Post>,
+}
+
+pub type PostsSubbest = Vec<std::collections::HashMap<String,Vec<String>>>;
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct PostsUpdate {
+    pub update_time: DateTime<Utc>
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct UserApiToken {
