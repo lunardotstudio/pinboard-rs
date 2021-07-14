@@ -19,7 +19,7 @@ pub struct Note {
     pub hash: String,
     pub title: String,
     pub text: String,
-    pub length: i64,
+    pub length: usize,
     pub created_at: String,
     pub updated_at: String,
 }
@@ -29,14 +29,14 @@ pub struct NoteSummary {
     pub id: String,
     pub hash: String,
     pub title: String,
-    pub length: i64,
+    pub length: usize,
     pub created_at: String,
     pub updated_at: String,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct NoteList {
-    pub count: i64,
+    pub count: usize,
     pub notes: Vec<NoteSummary>
 }
 
@@ -64,7 +64,7 @@ pub struct PostsAdd {
 pub struct PostsDates {
     pub user: String,
     pub tag: String,
-    dates: HashMap<String, i64>
+    dates: HashMap<String, usize>
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -81,7 +81,7 @@ pub struct PostsUpdate {
     pub update_time: DateTime<Utc>
 }
 
-pub type Tags = HashMap<String, i64>;
+pub type Tags = HashMap<String, usize>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct UserApiToken {

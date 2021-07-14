@@ -114,7 +114,7 @@ mod tests {
     }
 
     #[test]
-    fn test_gitlab_non_json_response() {
+    fn test_pinboard_non_json_response() {
         let endpoint = ExpectedUrl::builder().endpoint("dummy").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint, "not json");
 
@@ -123,7 +123,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_gitlab_non_json_response_async() {
+    async fn test_pinboard_non_json_response_async() {
         let endpoint = ExpectedUrl::builder().endpoint("dummy").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint, "not json");
 
@@ -132,7 +132,7 @@ mod tests {
     }
 
     #[test]
-    fn test_gitlab_error_bad_json() {
+    fn test_pinboard_error_bad_json() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
@@ -141,7 +141,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::GitlabService {
+        if let ApiError::PinboardService {
             status, ..
         } = err
         {
@@ -152,7 +152,7 @@ mod tests {
     }
 
     #[test]
-    fn test_gitlab_error_detection() {
+    fn test_pinboard_error_detection() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
@@ -161,12 +161,12 @@ mod tests {
         let client = SingleTestClient::new_json(
             endpoint,
             &json!({
-                "message": "dummy error message",
+                "error_message": "dummy error message",
             }),
         );
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::Gitlab {
+        if let ApiError::Pinboard {
             msg,
         } = err
         {
@@ -177,7 +177,7 @@ mod tests {
     }
 
     #[test]
-    fn test_gitlab_error_detection_legacy() {
+    fn test_pinboard_error_detection_legacy() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
@@ -186,12 +186,12 @@ mod tests {
         let client = SingleTestClient::new_json(
             endpoint,
             &json!({
-                "error": "dummy error message",
+                "error_message": "dummy error message",
             }),
         );
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::Gitlab {
+        if let ApiError::Pinboard {
             msg,
         } = err
         {
@@ -202,7 +202,7 @@ mod tests {
     }
 
     #[test]
-    fn test_gitlab_error_detection_unknown() {
+    fn test_pinboard_error_detection_unknown() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
@@ -214,7 +214,7 @@ mod tests {
         let client = SingleTestClient::new_json(endpoint, &err_obj);
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::GitlabUnrecognized {
+        if let ApiError::PinboardUnrecognized {
             obj,
         } = err
         {

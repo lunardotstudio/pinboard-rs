@@ -1,9 +1,16 @@
 [package]
 name = "pinboard-rs"
-version = "0.1.0"
-edition = "2018"
+version = "1.0.0"
+edition = "2021"
+authors = ["Enoch Nyx <nyx@lunar.studio>"]
+rust-version = "1.70"
+license = "MIT OR Apache-2.0"
+description = "API inferface for pinboard.in"
+repository = "https://github.com/lunardotstudio/pinboard-rs"
+keywords = ["pinboard", "api", "bookmarks"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[badges]
+maintenance = { status = "actively-developed" }
 
 [dependencies]
 derive_builder = "~0.10"

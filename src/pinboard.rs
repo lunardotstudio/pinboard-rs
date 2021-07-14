@@ -191,10 +191,12 @@ impl api::Client for Pinboard {
 #[derive(Clone)]
 pub struct AsyncPinboard {
     /// The client to use for API calls
+    #[allow(dead_code)]
     client: reqwest::Client,
     /// The base to use for API calls
     url: Url,
     /// The authorization information to use for communication with Pinboard
+    #[allow(dead_code)]
     auth: Auth,
 }
 
