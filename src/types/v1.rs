@@ -9,7 +9,34 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
-pub struct PostsDefault {
+pub struct Default {
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct Note {
+    pub id: String,
+    pub hash: String,
+    pub title: String,
+    pub text: String,
+    pub length: i64,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct NoteSummary {
+    pub id: String,
+    pub hash: String,
+    pub title: String,
+    pub length: i64,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct NoteList {
+    pub count: i64,
+    pub notes: Vec<NoteSummary>
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -36,7 +63,7 @@ pub struct PostsAdd {
 pub struct PostsDates {
     pub user: String,
     pub tag: String,
-    dates: HashMap<String, i32>
+    dates: HashMap<String, i64>
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]

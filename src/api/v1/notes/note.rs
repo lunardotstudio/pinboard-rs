@@ -29,7 +29,7 @@ impl<'a> Endpoint for Note<'a> {
     }
 
     fn endpoint(&self) -> Cow<'static, str> {
-        format!("v1/notes/note/{}",self.id).into()
+        format!("v1/notes/{}/",self.id).into()
     }
 }
 
@@ -48,7 +48,7 @@ mod tests {
     #[test]
     fn endpoint() {
 
-        let endpoint = ExpectedUrl::builder().endpoint("v1/notes/note/IDHERE").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("v1/notes/IDHERE/").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint,"");
 
         let endpoint = Note::builder().id("IDHERE").build().unwrap();
