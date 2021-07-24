@@ -7,8 +7,8 @@
 use std::convert::TryInto;
 use std::fmt::{self, Debug};
 
-use crate::auth::{Auth, AuthError};
 use crate::api;
+use crate::auth::{Auth, AuthError};
 use bytes::Bytes;
 use http::Response as HttpResponse;
 use reqwest::blocking::Client;
@@ -16,7 +16,7 @@ use reqwest::Client as AsyncClient;
 use thiserror::Error;
 use url::Url;
 
-#[derive(Debug,Error)]
+#[derive(Debug, Error)]
 #[non_exhaustive]
 pub enum PinboardError {
     #[error("failed to parse url: {}", source)]
@@ -28,8 +28,8 @@ pub enum PinboardError {
     #[error("error setting auth header: {}", source)]
     AuthError {
         #[from]
-        source: AuthError
-    }
+        source: AuthError,
+    },
 }
 
 type PinboardResult<T> = Result<T, PinboardError>;
@@ -43,14 +43,12 @@ pub struct Pinboard {
     /// The base URL to use for API calls
     url: Url,
     /// The authentication information to use for communication
-    auth: Auth
+    auth: Auth,
 }
 
 impl Debug for Pinboard {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("Pinboard")
-            .field("url", &self.url)
-            .finish()
+        f.debug_struct("Pinboard").field("url", &self.url).finish()
     }
 }
 
@@ -63,24 +61,14 @@ impl Pinboard {
         H: AsRef<str>,
         T: Into<String>,
     {
-        Self::new_impl(
-            host.as_ref(),
-            Auth::Token(token.into())
-        )
+        Self::new_impl(host.as_ref(), Auth::Token(token.into()))
     }
 
     /// Internal method to create a new client
-    fn new_impl(
-        host: &str,
-        auth: Auth
-    ) -> PinboardResult<Self> {
+    fn new_impl(host: &str, auth: Auth) -> PinboardResult<Self> {
         let url = Url::parse(&format!("https://{}/", host))?;
         let client = Client::new();
-        let api = Pinboard {
-            client,
-            url,
-            auth
-        };
+        let api = Pinboard { client, url, auth };
 
         Ok(api)
     }
@@ -94,7 +82,6 @@ impl Pinboard {
         PinboardBuilder::new(host, token)
     }
 }
-
 
 pub struct PinboardBuilder {
     host: String,
@@ -115,18 +102,11 @@ impl PinboardBuilder {
     }
 
     pub fn build(&self) -> PinboardResult<Pinboard> {
-        Pinboard::new_impl(
-            &self.host,
-            self.token.clone(),
-        )
+        Pinboard::new_impl(&self.host, self.token.clone())
     }
 
     pub async fn build_async(&self) -> PinboardResult<AsyncPinboard> {
-        AsyncPinboard::new_impl(
-            &self.host,
-            self.token.clone(),
-        )
-            .await
+        AsyncPinboard::new_impl(&self.host, self.token.clone()).await
     }
 }
 
@@ -139,7 +119,7 @@ pub enum RestError {
         source: AuthError,
     },
     #[error("communication with pinboard: {}", source)]
-    Communication{
+    Communication {
         #[from]
         source: reqwest::Error,
     },
@@ -208,20 +188,12 @@ impl Debug for AsyncPinboard {
     }
 }
 
-
 impl AsyncPinboard {
     /// Internal method to create a new client
-    async fn new_impl(
-        host: &str,
-        auth: Auth
-    ) -> PinboardResult<Self> {
+    async fn new_impl(host: &str, auth: Auth) -> PinboardResult<Self> {
         let url = Url::parse(&format!("https://{}/", host))?;
         let client = AsyncClient::new();
-        let api = AsyncPinboard {
-            client,
-            url,
-            auth
-        };
+        let api = AsyncPinboard { client, url, auth };
 
         Ok(api)
     }

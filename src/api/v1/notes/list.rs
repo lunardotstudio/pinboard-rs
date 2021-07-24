@@ -34,15 +34,18 @@ impl Limit for List {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::Limit;
     use crate::api::v1::notes::List;
+    use crate::api::v1::Limit;
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
     #[test]
     fn endpoint() {
-        let endpoint = ExpectedUrl::builder().endpoint("v1/notes/list").build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("v1/notes/list")
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = List::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -50,6 +53,6 @@ mod tests {
 
     #[test]
     fn limit() {
-	assert_eq!(List::secs_between_calls(), 3)
+        assert_eq!(List::secs_between_calls(), 3)
     }
 }

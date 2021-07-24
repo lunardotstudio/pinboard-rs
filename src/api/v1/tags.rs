@@ -5,10 +5,10 @@
 // except according to those terms.
 
 //! Builders to interact with the set of tags endpoints.
-mod get;
 mod delete;
+mod get;
 mod rename;
 
-pub use self::get::Get;
 pub use self::delete::Delete;
+pub use self::get::Get;
 pub use self::rename::Rename;

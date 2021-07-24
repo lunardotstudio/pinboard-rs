@@ -115,10 +115,7 @@ impl SingleTestClient {
     {
         let mut client = MockClient::default();
 
-        let request = (
-            expected.method.clone(),
-            format!("/{}", expected.endpoint),
-        );
+        let request = (expected.method.clone(), format!("/{}", expected.endpoint));
         let response = MockResponse {
             status: expected.status,
             data: data.into(),
@@ -126,10 +123,7 @@ impl SingleTestClient {
 
         client.response_map.insert(request, response);
 
-        Self {
-            client,
-            expected,
-        }
+        Self { client, expected }
     }
 
     pub fn new_json<T>(expected: ExpectedUrl, data: &T) -> Self
@@ -183,12 +177,12 @@ impl Client for SingleTestClient {
         let request = request.body(body).unwrap();
 
         Ok(self
-           .client
-           .response_map
-           .get(&(request.method().clone(), request.uri().path().into()))
-           .expect("no matching request found")
-           .response()
-           .map(Into::into))
+            .client
+            .response_map
+            .get(&(request.method().clone(), request.uri().path().into()))
+            .expect("no matching request found")
+            .response()
+            .map(Into::into))
     }
 }
 

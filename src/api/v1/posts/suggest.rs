@@ -4,9 +4,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `update` endpoint.
 #[derive(Debug, Clone, Builder)]
@@ -35,8 +35,7 @@ impl Endpoint for Suggest {
     fn parameters(&self) -> QueryParams {
         let mut params = QueryParams::default();
 
-        params
-            .push("url", self.url.as_ref());
+        params.push("url", self.url.as_ref());
 
         params
     }
@@ -46,7 +45,7 @@ impl Limit for Suggest {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::Suggest};
+    use crate::api::v1::{posts::Suggest, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -58,26 +57,24 @@ mod tests {
     #[test]
     fn url_is_required() {
         let err = Suggest::builder().build().unwrap_err();
-        assert_eq!(&err.to_string(),"`url` must be initialized")
+        assert_eq!(&err.to_string(), "`url` must be initialized")
     }
-
 
     #[test]
     fn endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/suggest")
             .add_query_params(&[("url", URL)])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = Suggest::builder()
-            .url(test_url())
-            .build().unwrap();
+        let endpoint = Suggest::builder().url(test_url()).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn limit() {
-	assert_eq!(Suggest::secs_between_calls(), 3)
+        assert_eq!(Suggest::secs_between_calls(), 3)
     }
 }

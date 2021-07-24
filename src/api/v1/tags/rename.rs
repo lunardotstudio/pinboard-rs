@@ -4,9 +4,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `v1/tags/rename` endpoint.
 #[derive(Debug, Clone, Builder)]
@@ -49,40 +49,41 @@ impl<'a> Limit for Rename<'a> {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, tags::Rename};
+    use crate::api::v1::{tags::Rename, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
     #[test]
     fn old_is_required() {
         let err = Rename::builder().build().unwrap_err();
-        assert_eq!(&err.to_string(),"`old` must be initialized")
+        assert_eq!(&err.to_string(), "`old` must be initialized")
     }
 
     #[test]
     fn new_is_required() {
         let err = Rename::builder().old("old").build().unwrap_err();
-        assert_eq!(&err.to_string(),"`new` must be initialized")
+        assert_eq!(&err.to_string(), "`new` must be initialized")
     }
 
     #[test]
     fn endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/tags/rename")
-            .add_query_params(&[("old", "buh-bye"),
-                                ("new", "see-ya")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("old", "buh-bye"), ("new", "see-ya")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Rename::builder()
             .old("buh-bye")
             .new("see-ya")
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn limit() {
-	assert_eq!(Rename::secs_between_calls(), 3)
+        assert_eq!(Rename::secs_between_calls(), 3)
     }
 }

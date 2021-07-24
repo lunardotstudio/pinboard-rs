@@ -17,9 +17,7 @@ pub struct Raw<E> {
 
 /// Return the raw data from the endpoint.
 pub fn raw<E>(endpoint: E) -> Raw<E> {
-    Raw {
-        endpoint,
-    }
+    Raw { endpoint }
 }
 
 impl<E, C> Query<Vec<u8>, C> for Raw<E>
@@ -141,10 +139,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::PinboardService {
-            status, ..
-        } = err
-        {
+        if let ApiError::PinboardService { status, .. } = err {
             assert_eq!(status, http::StatusCode::NOT_FOUND);
         } else {
             panic!("unexpected error: {}", err);
@@ -166,10 +161,7 @@ mod tests {
         );
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::Pinboard {
-            msg,
-        } = err
-        {
+        if let ApiError::Pinboard { msg } = err {
             assert_eq!(msg, "dummy error message");
         } else {
             panic!("unexpected error: {}", err);
@@ -191,10 +183,7 @@ mod tests {
         );
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::Pinboard {
-            msg,
-        } = err
-        {
+        if let ApiError::Pinboard { msg } = err {
             assert_eq!(msg, "dummy error message");
         } else {
             panic!("unexpected error: {}", err);
@@ -214,10 +203,7 @@ mod tests {
         let client = SingleTestClient::new_json(endpoint, &err_obj);
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
-        if let ApiError::PinboardUnrecognized {
-            obj,
-        } = err
-        {
+        if let ApiError::PinboardUnrecognized { obj } = err {
             assert_eq!(obj, err_obj);
         } else {
             panic!("unexpected error: {}", err);

@@ -56,7 +56,6 @@ where
         data: Vec<u8>,
     },
 
-    
     /// Failed to parse and expected data type from JSON.
     #[error("could not parse {} data from JSON: {}", typename, source)]
     DataType {
@@ -84,10 +83,9 @@ where
     #[error("{}", obj)]
     PinboardUnrecognized {
         /// The full object from Pinboard
-        obj: serde_json::Value
-    }
+        obj: serde_json::Value,
+    },
 }
-
 
 /// Errors which may occur when creating form data.
 #[derive(Debug, Error)]
@@ -99,9 +97,8 @@ pub enum BodyError {
         /// the source of the error
         #[from]
         source: serde_urlencoded::ser::Error,
-    }
+    },
 }
-
 
 impl<E> ApiError<E>
 where
@@ -109,9 +106,7 @@ where
 {
     /// Generate an ApiError from a client
     pub fn client(source: E) -> Self {
-        ApiError::Client {
-            source
-        }
+        ApiError::Client { source }
     }
 
     pub(crate) fn server_error(status: http::StatusCode, body: &bytes::Bytes) -> Self {
@@ -120,26 +115,21 @@ where
             data: body.into_iter().copied().collect(),
         }
     }
-    
+
     pub(crate) fn from_pinboard(value: serde_json::Value) -> Self {
         // TODO: This is now how pinboard returns errors
-        let error_message = value
-            .pointer("/error_message");
+        let error_message = value.pointer("/error_message");
 
         if let Some(error_message) = error_message {
             if let Some(msg) = error_message.as_str() {
-                ApiError::Pinboard {
-                    msg: msg.into(),
-                }
+                ApiError::Pinboard { msg: msg.into() }
             } else {
                 ApiError::PinboardObject {
                     obj: error_message.clone(),
                 }
             }
         } else {
-            ApiError::PinboardUnrecognized {
-                obj: value,
-            }
+            ApiError::PinboardUnrecognized { obj: value }
         }
     }
 

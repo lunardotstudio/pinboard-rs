@@ -4,16 +4,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `note` endpoint.
 #[derive(Debug, Clone, Builder)]
 pub struct Note<'a> {
     /// The note id
     #[builder(setter(into))]
-    id: Cow<'a, str>
+    id: Cow<'a, str>,
 }
 
 impl<'a> Note<'a> {
@@ -29,7 +29,7 @@ impl<'a> Endpoint for Note<'a> {
     }
 
     fn endpoint(&self) -> Cow<'static, str> {
-        format!("v1/notes/{}/",self.id).into()
+        format!("v1/notes/{}/", self.id).into()
     }
 }
 
@@ -37,22 +37,24 @@ impl<'a> Limit for Note<'a> {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::Limit;
     use crate::api::v1::notes::Note;
+    use crate::api::v1::Limit;
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
     #[test]
     fn id_is_required() {
-        let err= Note::builder().build().unwrap_err();
+        let err = Note::builder().build().unwrap_err();
         assert_eq!(&err.to_string(), "`id` must be initialized")
     }
 
     #[test]
     fn endpoint() {
-
-        let endpoint = ExpectedUrl::builder().endpoint("v1/notes/IDHERE/").build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("v1/notes/IDHERE/")
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Note::builder().id("IDHERE").build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -60,6 +62,6 @@ mod tests {
 
     #[test]
     fn limit() {
-	assert_eq!(Note::secs_between_calls(), 3)
+        assert_eq!(Note::secs_between_calls(), 3)
     }
 }

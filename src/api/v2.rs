@@ -6,16 +6,16 @@
 
 //! Pinboard API V1 endpoint structures
 //!
-pub mod general;
-pub mod delta;
 pub mod bookmarks;
-pub mod tags;
-pub mod network;
-pub mod subscriptions;
-pub mod notes;
 pub mod bundles;
-pub mod user;
+pub mod delta;
+pub mod general;
+pub mod network;
+pub mod notes;
 pub mod search;
 pub mod site;
-pub mod url;
+pub mod subscriptions;
+pub mod tags;
 pub mod test;
+pub mod url;
+pub mod user;

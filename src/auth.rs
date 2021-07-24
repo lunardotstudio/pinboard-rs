@@ -15,7 +15,6 @@ pub enum AuthError {
         #[from]
         source: http::header::InvalidHeaderValue,
     },
-
 }
 
 /// A Pinboard API Token
@@ -46,7 +45,7 @@ impl Auth {
     }
 
     /// Add the token to a url
-    pub fn add_to_url(&self,url: &mut url::Url) {
+    pub fn add_to_url(&self, url: &mut url::Url) {
         match self {
             Auth::Token(token) => {
                 let mut pairs = url.query_pairs_mut();

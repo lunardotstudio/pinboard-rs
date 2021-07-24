@@ -15,9 +15,9 @@
 mod client;
 mod endpoint;
 mod error;
+mod ignore;
 mod params;
 pub(crate) mod query;
-mod ignore;
 mod raw;
 
 pub mod v1;
@@ -34,8 +34,8 @@ pub use self::endpoint::Endpoint;
 pub use self::query::AsyncQuery;
 pub use self::query::Query;
 
-pub use self::params::QueryParams;
 pub use self::params::ParamValue;
+pub use self::params::QueryParams;
 
 pub use self::error::ApiError;
 pub use self::error::BodyError;

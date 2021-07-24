@@ -4,15 +4,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `v1/posts/delete` endpoint.
 #[derive(Debug, Clone, Builder)]
 pub struct Delete {
     /// The bookmark to delete
-    url: url::Url
+    url: url::Url,
 }
 
 impl Delete {
@@ -43,7 +43,7 @@ impl Limit for Delete {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::Delete};
+    use crate::api::v1::{posts::Delete, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -55,7 +55,7 @@ mod tests {
     #[test]
     fn url_is_required() {
         let err = Delete::builder().build().unwrap_err();
-        assert_eq!(&err.to_string(),"`url` must be initialized")
+        assert_eq!(&err.to_string(), "`url` must be initialized")
     }
 
     #[test]
@@ -63,8 +63,9 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/delete")
             .add_query_params(&[("url", URL)])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Delete::builder().url(test_url()).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -72,6 +73,6 @@ mod tests {
 
     #[test]
     fn limit() {
-	assert_eq!(Delete::secs_between_calls(), 3)
+        assert_eq!(Delete::secs_between_calls(), 3)
     }
 }

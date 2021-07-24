@@ -4,25 +4,25 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use chrono::NaiveDate;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use chrono::NaiveDate;
+use derive_builder::Builder;
 
 /// Query the `update` endpoint.
 #[derive(Debug, Clone, Builder)]
-#[builder(setter(strip_option), build_fn(validate="Self::validate"))]
+#[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct Add<'a> {
     /// The bookmark to save
     url: url::Url,
     /// The title of the link (backwards-compatible name)
-    #[builder(setter(into),default="self.default_description()?.into()")]
+    #[builder(setter(into), default = "self.default_description()?.into()")]
     description: Cow<'a, str>,
     /// The description of the link (backwards-compatible name)
-    #[builder(setter(into),default)]
+    #[builder(setter(into), default)]
     extended: Option<Cow<'a, str>>,
     /// The tags to add (limit of 100)
-    #[builder(setter(into),default)]
+    #[builder(setter(into), default)]
     tags: Option<Cow<'a, [&'a str]>>,
     /// Creation time of this bookmark
     #[builder(default)]
@@ -41,26 +41,28 @@ pub struct Add<'a> {
 
 impl<'a> AddBuilder<'a> {
     // Ensure there is something for a default description
-    fn default_description(&self) -> Result<String,String> {
+    fn default_description(&self) -> Result<String, String> {
         match self.url {
             Some(ref url) => Ok(url.to_string()),
-            _ => Err("Could not make default `description` from `url`".to_string())
+            _ => Err("Could not make default `description` from `url`".to_string()),
         }
     }
 
     // Check that the tags to not exceed 100
     fn validate(&self) -> Result<(), String> {
-        if let Some(ref cow) =  self.tags {
-            if let Some(xs) = cow{
+        if let Some(ref cow) = self.tags {
+            if let Some(xs) = cow {
                 if xs.len() > 100 {
-                    return Err(format!("Endpoint only accepts up to 100 tags (received {})", xs.len()))
+                    return Err(format!(
+                        "Endpoint only accepts up to 100 tags (received {})",
+                        xs.len()
+                    ));
                 }
             }
         }
         Ok(())
     }
 }
-
 
 impl<'a> Add<'a> {
     /// Create a builder for the endpoint
@@ -87,19 +89,22 @@ impl<'a> Endpoint for Add<'a> {
             .push_opt("extended", self.extended.as_ref())
             .push_opt("tags", self.tags.as_ref().map(|xs| xs.join(" ")))
             .push_opt("dt", self.dt)
-            .push_opt("replace", self.replace.map(|x| if x {"yes"} else {"no"} ))
-            .push_opt("shared", self.shared.map(|x| if x {"yes"} else {"no"} ))
-            .push_opt("toread", self.toread.map(|x| if x {"yes"} else {"no"} ));
+            .push_opt(
+                "replace",
+                self.replace.map(|x| if x { "yes" } else { "no" }),
+            )
+            .push_opt("shared", self.shared.map(|x| if x { "yes" } else { "no" }))
+            .push_opt("toread", self.toread.map(|x| if x { "yes" } else { "no" }));
 
         params
     }
 }
 
 impl<'a> Limit for Add<'a> {}
-    
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::Add};
+    use crate::api::v1::{posts::Add, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
     use chrono::NaiveDate;
@@ -113,7 +118,7 @@ mod tests {
     #[test]
     fn url_is_required() {
         let err = Add::builder().description(TITLE).build().unwrap_err();
-        assert_eq!(&err.to_string(),"`url` must be initialized")
+        assert_eq!(&err.to_string(), "`url` must be initialized")
     }
 
     #[test]
@@ -126,15 +131,16 @@ mod tests {
     fn endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE)])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE)])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -142,17 +148,21 @@ mod tests {
     fn endpoint_extended() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("extended", "some extended text")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[
+                ("url", URL),
+                ("description", TITLE),
+                ("extended", "some extended text"),
+            ])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
             .extended("some extended text")
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -160,17 +170,17 @@ mod tests {
     fn endpoint_tags() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("tags", "one two")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE), ("tags", "one two")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
-            .tags(vec!["one","two"])
-            .build().unwrap();
+            .tags(vec!["one", "two"])
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -180,45 +190,48 @@ mod tests {
             .url(test_url())
             .description(TITLE)
             .tags(vec!["one"; 101])
-            .build().unwrap_err();
+            .build()
+            .unwrap_err();
 
-        assert_eq!(&err.to_string(), "Endpoint only accepts up to 100 tags (received 101)")
+        assert_eq!(
+            &err.to_string(),
+            "Endpoint only accepts up to 100 tags (received 101)"
+        )
     }
 
     #[test]
     fn endpoint_dt() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("dt", "2021-03-04")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE), ("dt", "2021-03-04")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
-            .dt(NaiveDate::from_ymd(2021,3,4))
-            .build().unwrap();
+            .dt(NaiveDate::from_ymd(2021, 3, 4))
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
-
 
     #[test]
     fn endpoint_replace() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("replace", "yes")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE), ("replace", "yes")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
             .replace(true)
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -226,17 +239,17 @@ mod tests {
     fn endpoint_shared() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("shared", "yes")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE), ("shared", "yes")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
             .shared(true)
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -244,22 +257,22 @@ mod tests {
     fn endpoint_toread() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/add")
-            .add_query_params(&[("url", URL),
-                                ("description", TITLE),
-                                ("toread", "yes")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("url", URL), ("description", TITLE), ("toread", "yes")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
             .toread(true)
-            .build().unwrap();
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn limit() {
-	assert_eq!(Add::secs_between_calls(), 3)
+        assert_eq!(Add::secs_between_calls(), 3)
     }
 }

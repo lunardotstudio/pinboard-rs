@@ -10,7 +10,7 @@ use std::collections::HashMap;
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Default {
-    pub result: String
+    pub result: String,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -37,7 +37,7 @@ pub struct NoteSummary {
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct NoteList {
     pub count: usize,
-    pub notes: Vec<NoteSummary>
+    pub notes: Vec<NoteSummary>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -57,14 +57,14 @@ pub type Posts = Vec<Post>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct PostsAdd {
-    pub result_code: String
+    pub result_code: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct PostsDates {
     pub user: String,
     pub tag: String,
-    dates: HashMap<String, usize>
+    dates: HashMap<String, usize>,
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -74,11 +74,11 @@ pub struct PostsList {
     pub posts: Vec<Post>,
 }
 
-pub type PostsSubbest = Vec<std::collections::HashMap<String,Vec<String>>>;
+pub type PostsSubbest = Vec<std::collections::HashMap<String, Vec<String>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct PostsUpdate {
-    pub update_time: DateTime<Utc>
+    pub update_time: DateTime<Utc>,
 }
 
 pub type Tags = HashMap<String, usize>;
@@ -86,11 +86,11 @@ pub type Tags = HashMap<String, usize>;
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct UserApiToken {
     #[serde(rename = "result")]
-    pub token: String
+    pub token: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct UserSecret {
     #[serde(rename = "result")]
-    pub secret: String
+    pub secret: String,
 }

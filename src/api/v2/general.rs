@@ -10,12 +10,12 @@
 //!
 //! These endpoints are used for general site interactions
 
-mod hello;
-mod awesome;
 mod auth;
+mod awesome;
+mod hello;
 mod last_update;
 
-pub use self::hello::Hello;
-pub use self::awesome::Awesome;
 pub use self::auth::Auth;
+pub use self::awesome::Awesome;
+pub use self::hello::Hello;
 pub use self::last_update::LastUpdate;

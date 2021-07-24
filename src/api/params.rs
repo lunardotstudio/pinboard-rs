@@ -16,7 +16,6 @@ pub trait ParamValue<'a> {
     fn as_value(&self) -> Cow<'a, str>;
 }
 
-
 impl ParamValue<'static> for bool {
     fn as_value(&self) -> Cow<'static, str> {
         if *self {
@@ -90,10 +89,9 @@ impl ParamValue<'static> for NaiveDate {
 
 impl ParamValue<'static> for &url::Url {
     fn as_value(&self) -> Cow<'static, str> {
-        format!("{}",self).into()
+        format!("{}", self).into()
     }
 }
-
 
 /// A structure for query parameters.
 #[derive(Debug, Default, Clone)]
@@ -107,7 +105,7 @@ impl<'a> QueryParams<'a> {
     where
         K: Into<Cow<'a, str>>,
         V: ParamValue<'b>,
-    'b: 'a,
+        'b: 'a,
     {
         self.params.push((key.into(), value.as_value()));
         self
@@ -118,7 +116,7 @@ impl<'a> QueryParams<'a> {
     where
         K: Into<Cow<'a, str>>,
         V: ParamValue<'b>,
-    'b: 'a,
+        'b: 'a,
     {
         if let Some(value) = value {
             self.params.push((key.into(), value.as_value()));
@@ -132,7 +130,7 @@ impl<'a> QueryParams<'a> {
         I: Iterator<Item = (K, V)>,
         K: Into<Cow<'a, str>>,
         V: ParamValue<'b>,
-    'b: 'a,
+        'b: 'a,
     {
         self.params
             .extend(iter.map(|(key, value)| (key.into(), value.as_value())));

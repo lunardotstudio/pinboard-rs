@@ -17,9 +17,7 @@ pub struct Ignore<E> {
 
 /// Ignore the resulting data from an endpoint.
 pub fn ignore<E>(endpoint: E) -> Ignore<E> {
-    Ignore {
-        endpoint,
-    }
+    Ignore { endpoint }
 }
 
 impl<E, C> Query<(), C> for Ignore<E>
@@ -131,10 +129,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let err = api::ignore(Dummy).query(&client).unwrap_err();
-        if let ApiError::Json {
-            source,
-        } = err
-        {
+        if let ApiError::Json { source } = err {
             assert_eq!(
                 format!("{}", source),
                 "EOF while parsing a value at line 1 column 0",
@@ -159,11 +154,11 @@ mod tests {
         );
 
         let err = api::ignore(Dummy).query(&client).unwrap_err();
-        if let ApiError::PinboardUnrecognized {
-            obj,
-        } = err
-        {
-            assert_eq!(obj.pointer("/message").expect("error message"), "dummy error message");
+        if let ApiError::PinboardUnrecognized { obj } = err {
+            assert_eq!(
+                obj.pointer("/message").expect("error message"),
+                "dummy error message"
+            );
         } else {
             panic!("unexpected error: {}", err);
         }
@@ -185,11 +180,11 @@ mod tests {
 
         let err = api::ignore(Dummy).query(&client).unwrap_err();
         println!("ERR: <{:?}>", err);
-        if let ApiError::PinboardUnrecognized {
-            obj,
-        } = err
-        {
-            assert_eq!(obj.pointer("/error").expect("error message"), "dummy error message");
+        if let ApiError::PinboardUnrecognized { obj } = err {
+            assert_eq!(
+                obj.pointer("/error").expect("error message"),
+                "dummy error message"
+            );
         } else {
             panic!("unexpected error: {}", err);
         }
@@ -208,10 +203,7 @@ mod tests {
         let client = SingleTestClient::new_json(endpoint, &err_obj);
 
         let err = api::ignore(Dummy).query(&client).unwrap_err();
-        if let ApiError::PinboardUnrecognized {
-            obj,
-        } = err
-        {
+        if let ApiError::PinboardUnrecognized { obj } = err {
             assert_eq!(obj, err_obj);
         } else {
             panic!("unexpected error: {}", err);

@@ -4,9 +4,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `update` endpoint.
 #[derive(Debug, Clone, Copy, Builder)]
@@ -33,14 +33,17 @@ impl Limit for Update {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::Update};
+    use crate::api::v1::{posts::Update, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
     #[test]
     fn endpoint() {
-        let endpoint = ExpectedUrl::builder().endpoint("v1/posts/update").build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("v1/posts/update")
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Update::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -48,6 +51,6 @@ mod tests {
 
     #[test]
     fn limit() {
-	assert_eq!(Update::secs_between_calls(), 3)
+        assert_eq!(Update::secs_between_calls(), 3)
     }
 }

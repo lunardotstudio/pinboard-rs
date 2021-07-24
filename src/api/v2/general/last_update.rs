@@ -20,7 +20,7 @@ impl LastUpdate {
 }
 
 impl Endpoint for LastUpdate {
-    fn method(&self) -> Method{
+    fn method(&self) -> Method {
         Method::GET
     }
 

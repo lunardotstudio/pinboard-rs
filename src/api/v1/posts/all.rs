@@ -6,16 +6,16 @@
 
 use derive_builder::Builder;
 
-use chrono::NaiveDate;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use chrono::NaiveDate;
 
 /// Query the `update` endpoint.
 #[derive(Debug, Clone, Builder)]
-#[builder(setter(strip_option), build_fn(validate="Self::validate"))]
+#[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct All<'a> {
     /// Filter by up to 3 tags
-    #[builder(setter(into),default)]
+    #[builder(setter(into), default)]
     tags: Option<Cow<'a, [&'a str]>>,
     /// Offset value (default is 0)
     #[builder(default)]
@@ -37,10 +37,13 @@ pub struct All<'a> {
 impl<'a> AllBuilder<'a> {
     // Check that the tags to not exceed 100
     fn validate(&self) -> Result<(), String> {
-        if let Some(ref cow) =  self.tags {
-            if let Some(xs) = cow{
+        if let Some(ref cow) = self.tags {
+            if let Some(xs) = cow {
                 if xs.len() > 3 {
-                    return Err(format!("Endpoint only accepts up to 3 tags (received {})", xs.len()))
+                    return Err(format!(
+                        "Endpoint only accepts up to 3 tags (received {})",
+                        xs.len()
+                    ));
                 }
             }
         }
@@ -72,8 +75,8 @@ impl<'a> Endpoint for All<'a> {
             .push_opt("start", self.start)
             .push_opt("results", self.results)
             .push_opt("fromdt", self.fromdt)
-            .push_opt("todt",self.todt)
-            .push_opt("meta", self.meta.map(|x| if x {"yes"} else {"no"} ));
+            .push_opt("todt", self.todt)
+            .push_opt("meta", self.meta.map(|x| if x { "yes" } else { "no" }));
 
         params
     }
@@ -81,13 +84,13 @@ impl<'a> Endpoint for All<'a> {
 
 impl<'a> Limit for All<'a> {
     fn secs_between_calls() -> usize {
-	300
+        300
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::All};
+    use crate::api::v1::{posts::All, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
     use chrono::NaiveDate;
@@ -96,36 +99,35 @@ mod tests {
     fn endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = All::builder()
-            .build().unwrap();
+        let endpoint = All::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
-
 
     #[test]
     fn endpoint_tags() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("tag", "one two")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = All::builder()
-            .tags(vec!["one","two"])
-            .build().unwrap();
+        let endpoint = All::builder().tags(vec!["one", "two"]).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn endpoint_tags_8() {
-        let err = All::builder()
-            .tags(vec!["one"; 8])
-            .build().unwrap_err();
+        let err = All::builder().tags(vec!["one"; 8]).build().unwrap_err();
 
-        assert_eq!(&err.to_string(), "Endpoint only accepts up to 3 tags (received 8)")
+        assert_eq!(
+            &err.to_string(),
+            "Endpoint only accepts up to 3 tags (received 8)"
+        )
     }
 
     #[test]
@@ -133,12 +135,11 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("start", "88")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = All::builder()
-            .start(88)
-            .build().unwrap();
+        let endpoint = All::builder().start(88).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -147,12 +148,11 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("results", "256")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = All::builder()
-            .results(256)
-            .build().unwrap();
+        let endpoint = All::builder().results(256).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -161,12 +161,14 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("fromdt", "2001-05-06")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = All::builder()
-            .fromdt(NaiveDate::from_ymd(2001,5,6))
-            .build().unwrap();
+            .fromdt(NaiveDate::from_ymd(2001, 5, 6))
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -175,12 +177,14 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("todt", "2010-08-09")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = All::builder()
-            .todt(NaiveDate::from_ymd(2010,8,9))
-            .build().unwrap();
+            .todt(NaiveDate::from_ymd(2010, 8, 9))
+            .build()
+            .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
@@ -189,17 +193,16 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/all")
             .add_query_params(&[("meta", "yes")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = All::builder()
-            .meta(true)
-            .build().unwrap();
+        let endpoint = All::builder().meta(true).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn limit() {
-	assert_eq!(All::secs_between_calls(), 300)
+        assert_eq!(All::secs_between_calls(), 300)
     }
 }

@@ -9,11 +9,11 @@
 
 //! A library for communicating with Gitlab instances.
 
-mod pinboard;
 mod auth;
+mod pinboard;
 
-pub mod types;
 pub mod api;
+pub mod types;
 
 #[cfg(test)]
 mod test;

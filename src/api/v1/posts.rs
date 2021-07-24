@@ -7,20 +7,20 @@
 
 //! Builders to interact with the set of post endpoints.
 //!
-mod update;
 mod add;
+mod all;
+mod dates;
 mod delete;
 mod get;
 mod recent;
-mod dates;
-mod all;
 mod suggest;
+mod update;
 
-pub use self::update::Update;
 pub use self::add::Add;
+pub use self::all::All;
+pub use self::dates::Dates;
 pub use self::delete::Delete;
 pub use self::get::Get;
 pub use self::recent::Recent;
-pub use self::dates::Dates;
-pub use self::all::All;
 pub use self::suggest::Suggest;
+pub use self::update::Update;

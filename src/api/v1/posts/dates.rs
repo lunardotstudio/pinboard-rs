@@ -4,16 +4,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use derive_builder::Builder;
-use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
+use derive_builder::Builder;
 
 /// Query the `update` endpoint.
 #[derive(Debug, Clone, Builder)]
-#[builder(setter(strip_option), build_fn(validate="Self::validate"))]
+#[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct Dates<'a> {
     /// Tag filter (up to 3 tags)
-    #[builder(setter(into),default)]
+    #[builder(setter(into), default)]
     tags: Option<Cow<'a, [&'a str]>>,
 }
 
@@ -29,10 +29,13 @@ impl<'a> DatesBuilder<'a> {
     // There can only be 3 tags.
     // Count is limited to 100.
     fn validate(&self) -> Result<(), String> {
-        if let Some(ref cow) =  self.tags {
+        if let Some(ref cow) = self.tags {
             if let Some(xs) = cow {
                 if xs.len() > 3 {
-                    return Err(format!("Endpoint only accepts up to 3 tags (received {})", xs.len()))
+                    return Err(format!(
+                        "Endpoint only accepts up to 3 tags (received {})",
+                        xs.len()
+                    ));
                 }
             }
         }
@@ -62,14 +65,17 @@ impl<'a> Limit for Dates<'a> {}
 
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::{Limit, posts::Dates};
+    use crate::api::v1::{posts::Dates, Limit};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
     #[test]
     fn endpoint() {
-        let endpoint = ExpectedUrl::builder().endpoint("v1/posts/dates").build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("v1/posts/dates")
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Dates::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -79,24 +85,29 @@ mod tests {
     fn endpoint_tag() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("v1/posts/dates")
-            .add_query_params(&[("tag","Tag1 Tag2")])
-            .build().unwrap();
-        let client = SingleTestClient::new_raw(endpoint,"");
+            .add_query_params(&[("tag", "Tag1 Tag2")])
+            .build()
+            .unwrap();
+        let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = Dates::builder().tags(vec!["Tag1","Tag2"]).build().unwrap();
+        let endpoint = Dates::builder().tags(vec!["Tag1", "Tag2"]).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
     }
 
     #[test]
     fn endpoint_tag_4() {
         let err = Dates::builder()
-            .tags(vec!["Tag1","Tag2","Tag3","Tag4"])
-            .build().unwrap_err();
-        assert_eq!(&err.to_string(), "Endpoint only accepts up to 3 tags (received 4)")
+            .tags(vec!["Tag1", "Tag2", "Tag3", "Tag4"])
+            .build()
+            .unwrap_err();
+        assert_eq!(
+            &err.to_string(),
+            "Endpoint only accepts up to 3 tags (received 4)"
+        )
     }
 
     #[test]
     fn limit() {
-	assert_eq!(Dates::secs_between_calls(), 3)
+        assert_eq!(Dates::secs_between_calls(), 3)
     }
 }
