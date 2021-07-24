@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `api_token` endpoint.
@@ -29,9 +29,11 @@ impl Endpoint for ApiToken {
     }
 }
 
+impl Limit for ApiToken {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::user::ApiToken;
+    use crate::api::v1::{Limit, user::ApiToken};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -42,5 +44,10 @@ mod tests {
 
         let endpoint = ApiToken::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(ApiToken::secs_between_calls(), 3)
     }
 }

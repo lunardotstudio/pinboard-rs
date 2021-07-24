@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -58,9 +58,11 @@ impl<'a> Endpoint for Dates<'a> {
     }
 }
 
+impl<'a> Limit for Dates<'a> {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Dates;
+    use crate::api::v1::{Limit, posts::Dates};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -91,5 +93,10 @@ mod tests {
             .tags(vec!["Tag1","Tag2","Tag3","Tag4"])
             .build().unwrap_err();
         assert_eq!(&err.to_string(), "Endpoint only accepts up to 3 tags (received 4)")
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Dates::secs_between_calls(), 3)
     }
 }

@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -72,9 +72,15 @@ impl<'a> Endpoint for Recent<'a> {
     }
 }
 
+impl<'a> Limit for Recent<'a> {
+    fn secs_between_calls() -> usize {
+	60
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Recent;
+    use crate::api::v1::{Limit,posts::Recent};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -125,5 +131,10 @@ mod tests {
             .count(201)
             .build().unwrap_err();
         assert_eq!(&err.to_string(), "Endpoint only accepts `count` of 100 or less")
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Recent::secs_between_calls(), 60)
     }
 }

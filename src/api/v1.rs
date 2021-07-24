@@ -11,3 +11,11 @@ pub mod posts;
 pub mod tags;
 pub mod user;
 pub mod notes;
+
+pub trait Limit {
+    /// By default, the endoints are allowed calls every 3 seconds
+    /// https://pinboard.in/api#limits 
+    fn secs_between_calls() -> usize {
+	3
+    }
+}

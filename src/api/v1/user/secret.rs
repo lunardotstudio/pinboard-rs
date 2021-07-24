@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `secret` endpoint.
@@ -29,9 +29,11 @@ impl Endpoint for Secret {
     }
 }
 
+impl Limit for Secret {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::user::Secret;
+    use crate::api::v1::{Limit, user::Secret};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -42,5 +44,10 @@ mod tests {
 
         let endpoint = Secret::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Secret::secs_between_calls(), 3)
     }
 }

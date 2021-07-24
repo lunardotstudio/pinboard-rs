@@ -5,9 +5,8 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
 use chrono::NaiveDate;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -96,9 +95,11 @@ impl<'a> Endpoint for Add<'a> {
     }
 }
 
+impl<'a> Limit for Add<'a> {}
+    
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Add;
+    use crate::api::v1::{Limit, posts::Add};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
     use chrono::NaiveDate;
@@ -255,5 +256,10 @@ mod tests {
             .toread(true)
             .build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Add::secs_between_calls(), 3)
     }
 }

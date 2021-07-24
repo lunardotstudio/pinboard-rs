@@ -7,6 +7,7 @@
 use derive_builder::Builder;
 
 use crate::api::endpoint_prelude::*;
+use crate::api::v1::Limit;
 
 /// Query the `list` endpoint.
 #[derive(Debug, Clone, Copy, Builder)]
@@ -29,8 +30,11 @@ impl Endpoint for List {
     }
 }
 
+impl Limit for List {}
+
 #[cfg(test)]
 mod tests {
+    use crate::api::v1::Limit;
     use crate::api::v1::notes::List;
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
@@ -42,5 +46,10 @@ mod tests {
 
         let endpoint = List::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(List::secs_between_calls(), 3)
     }
 }

@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `v1/tags/get` endpoint.
@@ -29,9 +29,11 @@ impl Endpoint for Get {
     }
 }
 
+impl Limit for Get {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::tags::Get;
+    use crate::api::v1::{Limit, tags::Get};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -42,5 +44,10 @@ mod tests {
 
         let endpoint = Get::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Get::secs_between_calls(), 3)
     }
 }

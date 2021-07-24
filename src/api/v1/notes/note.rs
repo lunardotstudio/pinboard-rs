@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `note` endpoint.
@@ -33,8 +33,11 @@ impl<'a> Endpoint for Note<'a> {
     }
 }
 
+impl<'a> Limit for Note<'a> {}
+
 #[cfg(test)]
 mod tests {
+    use crate::api::v1::Limit;
     use crate::api::v1::notes::Note;
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
@@ -53,5 +56,10 @@ mod tests {
 
         let endpoint = Note::builder().id("IDHERE").build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Note::secs_between_calls(), 3)
     }
 }

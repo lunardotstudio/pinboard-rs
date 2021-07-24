@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `v1/posts/delete` endpoint.
@@ -39,9 +39,11 @@ impl Endpoint for Delete {
     }
 }
 
+impl Limit for Delete {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Delete;
+    use crate::api::v1::{Limit, posts::Delete};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -66,5 +68,10 @@ mod tests {
 
         let endpoint = Delete::builder().url(test_url()).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Delete::secs_between_calls(), 3)
     }
 }

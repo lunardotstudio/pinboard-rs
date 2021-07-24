@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -42,9 +42,11 @@ impl Endpoint for Suggest {
     }
 }
 
+impl Limit for Suggest {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Suggest;
+    use crate::api::v1::{Limit, posts::Suggest};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -72,5 +74,10 @@ mod tests {
             .url(test_url())
             .build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Suggest::secs_between_calls(), 3)
     }
 }

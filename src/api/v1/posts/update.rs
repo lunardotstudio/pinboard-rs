@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -29,9 +29,11 @@ impl Endpoint for Update {
     }
 }
 
+impl Limit for Update {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Update;
+    use crate::api::v1::{Limit, posts::Update};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -42,5 +44,10 @@ mod tests {
 
         let endpoint = Update::builder().build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Update::secs_between_calls(), 3)
     }
 }

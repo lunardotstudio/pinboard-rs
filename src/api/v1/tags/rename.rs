@@ -5,7 +5,7 @@
 // except according to those terms.
 
 use derive_builder::Builder;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `v1/tags/rename` endpoint.
@@ -45,9 +45,11 @@ impl<'a> Endpoint for Rename<'a> {
     }
 }
 
+impl<'a> Limit for Rename<'a> {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::tags::Rename;
+    use crate::api::v1::{Limit, tags::Rename};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
 
@@ -77,5 +79,10 @@ mod tests {
             .new("see-ya")
             .build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Rename::secs_between_calls(), 3)
     }
 }

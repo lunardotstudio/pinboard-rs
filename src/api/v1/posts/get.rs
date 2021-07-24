@@ -7,7 +7,7 @@
 use derive_builder::Builder;
 
 use chrono::NaiveDate;
-
+use crate::api::v1::Limit;
 use crate::api::endpoint_prelude::*;
 
 /// Query the `update` endpoint.
@@ -57,9 +57,11 @@ impl<'a> Endpoint for Get<'a> {
     }
 }
 
+impl<'a> Limit for Get<'a> {}
+
 #[cfg(test)]
 mod tests {
-    use crate::api::v1::posts::Get;
+    use crate::api::v1::{Limit, posts::Get};
     use crate::api::{self, Query};
     use crate::test::client::{ExpectedUrl, SingleTestClient};
     use chrono::NaiveDate;
@@ -120,5 +122,10 @@ mod tests {
 
         let endpoint = Get::builder().dt(NaiveDate::from_ymd(2021,3,4)).build().unwrap();
         api::ignore(endpoint).query(&client).unwrap();
+    }
+
+    #[test]
+    fn limit() {
+	assert_eq!(Get::secs_between_calls(), 3)
     }
 }
