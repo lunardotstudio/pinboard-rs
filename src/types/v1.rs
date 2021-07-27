@@ -8,12 +8,12 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Default {
     pub result: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Note {
     pub id: String,
     pub hash: String,
@@ -24,7 +24,7 @@ pub struct Note {
     pub updated_at: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct NoteSummary {
     pub id: String,
     pub hash: String,
@@ -34,13 +34,13 @@ pub struct NoteSummary {
     pub updated_at: String,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct NoteList {
     pub count: usize,
     pub notes: Vec<NoteSummary>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Post {
     pub href: String,
     pub description: String,
@@ -67,7 +67,7 @@ pub struct PostsDates {
     dates: HashMap<String, usize>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct PostsList {
     pub date: DateTime<Utc>,
     pub user: String,
