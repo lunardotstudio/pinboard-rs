@@ -29,14 +29,12 @@ impl<'a> DatesBuilder<'a> {
     // There can only be 3 tags.
     // Count is limited to 100.
     fn validate(&self) -> Result<(), String> {
-        if let Some(ref cow) = self.tags {
-            if let Some(xs) = cow {
-                if xs.len() > 3 {
-                    return Err(format!(
-                        "Endpoint only accepts up to 3 tags (received {})",
-                        xs.len()
-                    ));
-                }
+        if let Some(Some(ref xs)) = self.tags {
+            if xs.len() > 3 {
+                return Err(format!(
+                    "Endpoint only accepts up to 3 tags (received {})",
+                    xs.len()
+                ));
             }
         }
 

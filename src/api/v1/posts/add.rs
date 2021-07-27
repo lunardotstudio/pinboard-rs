@@ -50,14 +50,12 @@ impl<'a> AddBuilder<'a> {
 
     // Check that the tags to not exceed 100
     fn validate(&self) -> Result<(), String> {
-        if let Some(ref cow) = self.tags {
-            if let Some(xs) = cow {
-                if xs.len() > 100 {
-                    return Err(format!(
-                        "Endpoint only accepts up to 100 tags (received {})",
-                        xs.len()
-                    ));
-                }
+        if let Some(Some(ref xs)) = self.tags {
+            if xs.len() > 100 {
+                return Err(format!(
+                    "Endpoint only accepts up to 100 tags (received {})",
+                    xs.len()
+                ));
             }
         }
         Ok(())
