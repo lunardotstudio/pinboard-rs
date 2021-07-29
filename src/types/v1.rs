@@ -69,7 +69,7 @@ pub struct PostsDates {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct PostsList {
-    pub date: DateTime<Utc>,
+    pub tag: String,
     pub user: String,
     pub posts: Vec<Post>,
 }
