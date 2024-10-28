@@ -128,7 +128,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = Get::builder()
-            .dt(NaiveDate::from_ymd(2021, 3, 4))
+            .dt(NaiveDate::from_ymd_opt(2021, 3, 4).expect("Valid date"))
             .build()
             .unwrap();
         api::ignore(endpoint).query(&client).unwrap();

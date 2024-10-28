@@ -106,11 +106,6 @@ mod tests {
         }
     }
 
-    #[derive(Debug)]
-    struct DummyResult {
-        value: u8,
-    }
-
     #[test]
     fn test_pinboard_non_json_response() {
         let endpoint = ExpectedUrl::builder().endpoint("dummy").build().unwrap();

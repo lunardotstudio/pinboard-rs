@@ -209,7 +209,7 @@ mod tests {
         let endpoint = Add::builder()
             .url(test_url())
             .description(TITLE)
-            .dt(NaiveDate::from_ymd(2021, 3, 4))
+            .dt(NaiveDate::from_ymd_opt(2021, 3, 4).expect("Valid date"))
             .build()
             .unwrap();
         api::ignore(endpoint).query(&client).unwrap();

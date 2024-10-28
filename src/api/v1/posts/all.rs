@@ -164,7 +164,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = All::builder()
-            .fromdt(NaiveDate::from_ymd(2001, 5, 6))
+            .fromdt(NaiveDate::from_ymd_opt(2001, 5, 6).expect("Valid date"))
             .build()
             .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
@@ -180,7 +180,7 @@ mod tests {
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = All::builder()
-            .todt(NaiveDate::from_ymd(2010, 8, 9))
+            .todt(NaiveDate::from_ymd_opt(2010, 8, 9).expect("Valid date"))
             .build()
             .unwrap();
         api::ignore(endpoint).query(&client).unwrap();
