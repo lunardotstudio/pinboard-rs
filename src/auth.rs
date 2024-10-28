@@ -36,10 +36,10 @@ impl Auth {
     ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
         match self {
             Auth::Token(token) => {
-                let mut token_header_value = HeaderValue::from_str(&token)?;
+                let mut token_header_value = HeaderValue::from_str(token)?;
                 token_header_value.set_sensitive(true);
                 headers.insert("X-Auth-Token", token_header_value);
-            }
+            },
         }
         Ok(headers)
     }
@@ -50,7 +50,7 @@ impl Auth {
             Auth::Token(token) => {
                 let mut pairs = url.query_pairs_mut();
                 pairs.append_pair("auth_token", token);
-            }
+            },
         }
     }
 }

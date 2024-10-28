@@ -12,7 +12,6 @@ use crate::auth::{Auth, AuthError};
 use bytes::Bytes;
 use http::Response as HttpResponse;
 use reqwest::blocking::Client;
-use reqwest::Client as AsyncClient;
 use thiserror::Error;
 use url::Url;
 
@@ -32,7 +31,7 @@ pub enum PinboardError {
     },
 }
 
-type PinboardResult<T> = Result<T, PinboardError>;
+pub type PinboardResult<T> = Result<T, PinboardError>;
 
 /// A pinboard API for a single user
 ///
@@ -71,42 +70,6 @@ impl Pinboard {
         let api = Pinboard { client, url, auth };
 
         Ok(api)
-    }
-
-    /// Create a new Pinboard API client builder.
-    pub fn builder<H, T>(host: H, token: T) -> PinboardBuilder
-    where
-        H: Into<String>,
-        T: Into<String>,
-    {
-        PinboardBuilder::new(host, token)
-    }
-}
-
-pub struct PinboardBuilder {
-    host: String,
-    token: Auth,
-}
-
-impl PinboardBuilder {
-    /// Create a new Pinboard API client builder.
-    pub fn new<H, T>(host: H, token: T) -> Self
-    where
-        H: Into<String>,
-        T: Into<String>,
-    {
-        Self {
-            host: host.into(),
-            token: Auth::Token(token.into()),
-        }
-    }
-
-    pub fn build(&self) -> PinboardResult<Pinboard> {
-        Pinboard::new_impl(&self.host, self.token.clone())
-    }
-
-    pub async fn build_async(&self) -> PinboardResult<AsyncPinboard> {
-        AsyncPinboard::new_impl(&self.host, self.token.clone()).await
     }
 }
 
@@ -163,38 +126,5 @@ impl api::Client for Pinboard {
             Ok(http_rsp.body(rsp.bytes()?)?)
         };
         call().map_err(api::ApiError::client)
-    }
-}
-
-/// A representation of an asynchronous Pinboard API for a single user
-///
-#[derive(Clone)]
-pub struct AsyncPinboard {
-    /// The client to use for API calls
-    #[allow(dead_code)]
-    client: reqwest::Client,
-    /// The base to use for API calls
-    url: Url,
-    /// The authorization information to use for communication with Pinboard
-    #[allow(dead_code)]
-    auth: Auth,
-}
-
-impl Debug for AsyncPinboard {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("AsyncPinboard")
-            .field("url", &self.url)
-            .finish()
-    }
-}
-
-impl AsyncPinboard {
-    /// Internal method to create a new client
-    async fn new_impl(host: &str, auth: Auth) -> PinboardResult<Self> {
-        let url = Url::parse(&format!("https://{}/", host))?;
-        let client = AsyncClient::new();
-        let api = AsyncPinboard { client, url, auth };
-
-        Ok(api)
     }
 }

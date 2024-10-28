@@ -7,8 +7,10 @@
 // TODO: Document API entities.
 // #![warn(missing_docs)]
 
-//! A library for communicating with Gitlab instances.
+//! A library for communicating with Pinboard.in
 
+#[cfg(feature = "asychronous")]
+mod async_pinboard;
 mod auth;
 mod pinboard;
 
@@ -18,4 +20,7 @@ pub mod types;
 #[cfg(test)]
 mod test;
 
-pub use crate::pinboard::{AsyncPinboard, Pinboard, PinboardBuilder, PinboardError};
+pub use crate::pinboard::{Pinboard, PinboardError};
+
+#[cfg(feature = "asychronous")]
+pub use crate::async_pinboard::AsyncPinboard;
