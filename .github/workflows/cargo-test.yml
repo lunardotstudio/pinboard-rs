@@ -1,0 +1,37 @@
+name: Automated Testing
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        rust_ver: [stable, nightly, "1.70"]
+    name: Test pinboard-rs on ${{ matrix.os }} with ${{ matrix.rust_ver }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      CARGO_TERM_COLOR: always
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update toolchain
+        run: |
+          rustup update
+          rustup component add clippy
+          rustup install ${{ matrix.rust_ver }}
+
+      - name: Report information
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version
+
+      - name: Test library
+        run: |
+          cargo check
+          cargo test
+          cargo build --release
+
+        
