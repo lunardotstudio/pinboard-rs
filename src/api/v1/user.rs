@@ -4,9 +4,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! Builders to interact with the set of user endpoints.
+//! Builders for user endpoints.
 mod api_token;
 mod secret;
 
+#[doc(inline)]
 pub use self::api_token::ApiToken;
+#[doc(inline)]
 pub use self::secret::Secret;

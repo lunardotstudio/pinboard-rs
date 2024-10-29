@@ -13,6 +13,22 @@ use crate::api::v1::Limit;
 #[derive(Debug, Clone, Copy, Builder)]
 pub struct List {}
 
+/// Create a List endpoint for notes.
+///
+/// <https://pinboard.in/api/#notes_list>
+///
+/// # Arguments
+/// There are no arguments for this endpoint.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::notes::List;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let list_endpoint = List::builder().build().unwrap();
+/// assert_eq!(list_endpoint.endpoint(), "v1/notes/list");
+/// # }
+/// ```
 impl List {
     /// Create a builder for the endpoint
     pub fn builder() -> ListBuilder {

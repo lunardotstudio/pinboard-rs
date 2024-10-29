@@ -8,7 +8,21 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `v1/tags/get` endpoint.
+/// Create a Get endpoint for tags.
+///
+/// <https://pinboard.in/api/#tags_get>
+///
+/// There are no arguments for this endpoint.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::tags::Get;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let tags_endpoint = Get::builder().build().unwrap();
+/// assert_eq!(tags_endpoint.endpoint(), "v1/tags/get");
+/// # }
+/// ```
 #[derive(Debug, Clone, Copy, Builder)]
 pub struct Get {}
 

@@ -8,7 +8,24 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `secret` endpoint.
+/// Create a Secret endpoint for users.
+///
+/// <https://pinboard.in/api/#user_secret>
+///
+/// This endpoint returns the user's secret RSS key.
+///
+/// # Arguments
+/// There are no arguments for this endpoint.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::user::Secret;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let secret_endpoint = Secret::builder().build().unwrap();
+/// assert_eq!(secret_endpoint.endpoint(), "v1/user/secret");
+/// # }
+/// ```
 #[derive(Debug, Clone, Copy, Builder)]
 pub struct Secret {}
 

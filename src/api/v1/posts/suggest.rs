@@ -8,7 +8,26 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `update` endpoint.
+/// Create a Suggest endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_suggest>
+///
+/// # Arguments
+/// This builder takes four optional arguments.
+/// * `url` - Return the bookmark for the URL
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Suggest;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// # use url::Url;
+/// let suggest_endpoint = Suggest::builder()
+///                        .url(Url::parse("http://example.com/").unwrap())
+///                        .build().unwrap();
+/// assert_eq!(suggest_endpoint.endpoint(), "v1/posts/suggest");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 #[builder(setter(strip_option))]
 pub struct Suggest {

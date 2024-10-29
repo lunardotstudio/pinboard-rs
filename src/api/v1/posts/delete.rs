@@ -8,7 +8,26 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `v1/posts/delete` endpoint.
+/// Create a Delete endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_delete>
+///
+/// # Arguments
+/// This builder takes four optional arguments.
+/// * `url` - Return the bookmark for the URL
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Delete;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// # use url::Url;
+/// let del_endpoint = Delete::builder()
+///                    .url(Url::parse("https://example.com").unwrap())
+///                    .build().unwrap();
+/// assert_eq!(del_endpoint.endpoint(), "v1/posts/delete");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 pub struct Delete {
     /// The bookmark to delete

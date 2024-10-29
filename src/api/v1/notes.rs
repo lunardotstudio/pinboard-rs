@@ -4,9 +4,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! Builders to interact with the set of note endpoints.
+//! Builders for note endpoints.
+//!
+//! These endpoints list and create notes.
 mod list;
 mod note;
 
+#[doc(inline)]
 pub use self::list::List;
+#[doc(inline)]
 pub use self::note::Note;

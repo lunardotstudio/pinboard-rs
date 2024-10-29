@@ -8,7 +8,24 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `v1/tags/rename` endpoint.
+/// Create a Rename endpoint for tags.
+///
+/// <https://pinboard.in/api/#tags_rename>
+///
+/// # Arguments
+/// There are two arguments for this builder.
+/// * `old` - name of the old (original) tag
+/// * `new` - name of the new tag name to use
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::tags::Rename;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let rename_endpoint = Rename::builder().old("C").new("C++").build().unwrap();
+/// assert_eq!(rename_endpoint.endpoint(), "v1/tags/rename");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 pub struct Rename<'a> {
     /// The old tag name

@@ -24,9 +24,9 @@ use crate::pinboard::{PinboardResult, RestError};
 pub struct AsyncPinboard {
     /// The client to use for API calls
     client: reqwest::Client,
-    /// The base to use for API calls
+    /// The base URL for API calls
     url: Url,
-    /// The authorization information to use for communication with Pinboard
+    /// The authorization for communication with Pinboard
     auth: Auth,
 }
 
@@ -41,7 +41,7 @@ impl Debug for AsyncPinboard {
 impl AsyncPinboard {
     /// Create a new async Pinboard API representation
     ///
-    /// The `token` is the person access token avaialble at https://pinboard.in
+    /// The `token` is the personal access token available at <https://pinboard.in>
     pub async fn new<H, T>(host: H, token: T) -> PinboardResult<Self>
     where
         H: AsRef<str>,

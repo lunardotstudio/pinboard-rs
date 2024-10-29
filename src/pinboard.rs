@@ -54,7 +54,7 @@ impl Debug for Pinboard {
 impl Pinboard {
     /// Create a new Pinboard API representation
     ///
-    /// The `token` is the personal access token available on http://pinboard.in
+    /// The `token` is the personal access token available on <http://pinboard.in>
     pub fn new<H, T>(host: H, token: T) -> PinboardResult<Self>
     where
         H: AsRef<str>,

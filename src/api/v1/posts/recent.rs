@@ -8,7 +8,24 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `update` endpoint.
+/// Create a Recent endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_recent>
+///
+/// # Arguments
+/// This builder takes two optional arguments.
+/// * `tag` - A tag filter
+/// * `count` - number of reesults to return
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Recent;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let recent_endpoint = Recent::builder().build().unwrap();
+/// assert_eq!(recent_endpoint.endpoint(), "v1/posts/recent");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 #[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct Recent<'a> {
@@ -72,6 +89,7 @@ impl<'a> Endpoint for Recent<'a> {
 }
 
 impl<'a> Limit for Recent<'a> {
+    /// Pinboard has a 60s limit between these calls
     fn secs_between_calls() -> usize {
         60
     }

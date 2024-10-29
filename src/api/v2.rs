@@ -4,7 +4,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! Pinboard API V1 endpoint structures
+//! Pinboard API V2 endpoint structures
 //!
 pub mod bookmarks;
 pub mod bundles;

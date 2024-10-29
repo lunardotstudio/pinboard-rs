@@ -9,8 +9,40 @@ use crate::api::v1::Limit;
 use chrono::NaiveDate;
 use derive_builder::Builder;
 
-/// Query the `update` endpoint.
-#[derive(Debug, Clone, Builder)]
+/// Create an Add endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_add>
+///
+/// # Arguments
+/// This builder takes two required arguments.
+/// * `url` - URL of the bookmark
+/// * `description` - title or description of the bookmark
+///
+/// The remaining six arguments are optional.
+/// * `extended` - extended description of the bookmark
+/// * `tags` - vector of up to 100 tags
+/// * `dt` - creation time for this bookmark
+/// * `replace` - boolean indicating if this should replace existing bookmark (default: true)
+/// * `shared` - boolean to make the bookmark public
+/// * `toread` - boolean that marks the bookmark as toread
+///
+/// Note that if no `dt` is supplied, the date of the last bookmark will
+/// be used.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Add;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// # use url::Url;
+/// let post_endpoint = Add::builder()
+///                     .url(Url::parse("https://example.com").unwrap())
+///                     .description("Example bookmark")
+///                     .build().unwrap();
+/// assert_eq!(post_endpoint.endpoint(), "v1/posts/add");
+/// # }
+/// ```
+#[derive(Builder, Debug)]
 #[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct Add<'a> {
     /// The bookmark to save

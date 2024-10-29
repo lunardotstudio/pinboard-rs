@@ -8,7 +8,23 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `update` endpoint.
+/// Create a Dates endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_dates>
+///
+/// # Arguments
+/// This builder takes one optional arguments.
+/// * `tag` - a vec of up to three tags to use as a filter
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Dates;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let dates_endpoint = Dates::builder().build().unwrap();
+/// assert_eq!(dates_endpoint.endpoint(), "v1/posts/dates");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 #[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct Dates<'a> {

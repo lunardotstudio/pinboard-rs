@@ -8,7 +8,22 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `note` endpoint.
+/// Create a Note endpoint for retrieving a single note.
+///
+/// <https://pinboard.in/api/#notes_get>
+///
+/// # Arguments
+/// * `id` - id of the note to retrieve
+///
+/// Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::notes::Note;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let note_endpoint = Note::builder().id("abc123").build().unwrap();
+/// assert_eq!(note_endpoint.endpoint(), "v1/notes/abc123/");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 pub struct Note<'a> {
     /// The note id

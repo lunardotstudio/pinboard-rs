@@ -8,7 +8,23 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `v1/tags/delete` endpoint.
+/// Create a Delete endpoint for tags.
+///
+/// <https://pinboard.in/api/#tags_delete>
+///
+/// # Arguments
+/// This endpoint requires the name of the tag to delete.
+/// * `tag` - the tag name
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::tags::Delete;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let del_endpoint = Delete::builder().tag("go").build().unwrap();
+/// assert_eq!(del_endpoint.endpoint(), "v1/tags/delete");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 pub struct Delete<'a> {
     /// The tag to delete

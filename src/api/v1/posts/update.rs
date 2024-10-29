@@ -8,7 +8,22 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use derive_builder::Builder;
 
-/// Query the `update` endpoint.
+/// Create an Update endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_update>
+///
+/// This endpoint returns the most recent time a bookmark was added, updated, or deleted.
+/// The guidance is to use this before All to see if a call to get all bookmarks is necessary.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Update;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let upd_endpoint = Update::builder().build().unwrap();
+/// assert_eq!(upd_endpoint.endpoint(), "v1/posts/update");
+/// # }
+/// ```
 #[derive(Debug, Clone, Copy, Builder)]
 pub struct Update {}
 

@@ -4,11 +4,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! Builders to interact with the set of tags endpoints.
+//! Builders for tags endpoints.
 mod delete;
 mod get;
 mod rename;
 
+#[doc(inline)]
 pub use self::delete::Delete;
+#[doc(inline)]
 pub use self::get::Get;
+#[doc(inline)]
 pub use self::rename::Rename;

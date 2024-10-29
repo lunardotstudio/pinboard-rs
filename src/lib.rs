@@ -4,12 +4,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-// TODO: Document API entities.
 // #![warn(missing_docs)]
 
-//! A library for communicating with Pinboard.in
-
-#[cfg(feature = "asychronous")]
+#[allow(clippy::needless_doctest_main)]
+#[doc = include_str!("../README.md")]
+#[cfg(feature = "async")]
 mod async_pinboard;
 mod auth;
 mod pinboard;
@@ -17,10 +16,9 @@ mod pinboard;
 pub mod api;
 pub mod types;
 
-#[cfg(test)]
-mod test;
-
+#[cfg(feature = "async")]
+pub use crate::async_pinboard::AsyncPinboard;
 pub use crate::pinboard::{Pinboard, PinboardError};
 
-#[cfg(feature = "asychronous")]
-pub use crate::async_pinboard::AsyncPinboard;
+#[cfg(test)]
+mod test;

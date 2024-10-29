@@ -10,8 +10,29 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use chrono::NaiveDate;
 
-/// Query the `update` endpoint.
-#[derive(Debug, Clone, Builder)]
+/// Create an All endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_all>
+///
+/// # Arguments
+/// This builder takes six optional arguments.
+/// * `tag` - a vec of up to 3 tags to use as a filter
+/// * `start` - offset value
+/// * `results` - number of results to return (defaults to all).
+/// * `fromdt` - return bookmarks created after this time
+/// * `todt` - return bookmarks created before this time
+/// * `meta` - include a change detection signature in results
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::All;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let all_endpoint = All::builder().results(11).build().unwrap();
+/// assert_eq!(all_endpoint.endpoint(), "v1/posts/all");
+/// # }
+/// ```
+#[derive(Builder, Clone, Debug)]
 #[builder(setter(strip_option), build_fn(validate = "Self::validate"))]
 pub struct All<'a> {
     /// Filter by up to 3 tags
@@ -35,7 +56,7 @@ pub struct All<'a> {
 }
 
 impl<'a> AllBuilder<'a> {
-    // Check that the tags to not exceed 100
+    // Ensure the number of tags does not exceed 3
     fn validate(&self) -> Result<(), String> {
         if let Some(Some(ref xs)) = self.tags {
             if xs.len() > 3 {
@@ -81,6 +102,7 @@ impl<'a> Endpoint for All<'a> {
 }
 
 impl<'a> Limit for All<'a> {
+    /// Pinboard has a 5 min limit between these calls
     fn secs_between_calls() -> usize {
         300
     }

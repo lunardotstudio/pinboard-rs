@@ -5,7 +5,7 @@
 // except according to those terms.
 #![allow(clippy::module_inception)]
 
-//! Builders to interact with the set of post endpoints.
+//! Builders for post endpoints.
 //!
 mod add;
 mod all;

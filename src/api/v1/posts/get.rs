@@ -10,7 +10,29 @@ use crate::api::endpoint_prelude::*;
 use crate::api::v1::Limit;
 use chrono::NaiveDate;
 
-/// Query the `update` endpoint.
+/// Create a Get endpoint for posts.
+///
+/// <https://pinboard.in/api/#posts_get>
+///
+/// # Arguments
+/// This builder takes four optional arguments.
+/// * `tag` - A tag filter
+/// * `dt` - Return results bookmarked on given day
+/// * `url` - Return the bookmark for the URL
+/// * `meta` - Include a change detection signature in results
+///
+/// Note that if no `dt` is supplied, the date of the last bookmark will
+/// be used.
+///
+/// # Example
+/// ```rust
+/// # fn main() {
+/// # use crate::pinboard_rs::api::v1::posts::Get;
+/// # use crate::pinboard_rs::api::Endpoint;
+/// let post_endpoint = Get::builder().build().unwrap();
+/// assert_eq!(post_endpoint.endpoint(), "v1/posts/get");
+/// # }
+/// ```
 #[derive(Debug, Clone, Builder)]
 #[builder(setter(strip_option))]
 pub struct Get<'a> {

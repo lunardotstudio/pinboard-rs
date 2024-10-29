@@ -23,6 +23,7 @@ mod raw;
 pub mod v1;
 pub mod v2;
 
+#[doc(hidden)]
 pub mod endpoint_prelude;
 
 pub use self::client::AsyncClient;
